@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车架号账户查询系统 - 420条数据版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 15px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, #0d47a1, #1565c0);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 i {
+            font-size: 2rem;
+            color: #ffd54f;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            opacity: 0.92;
+            margin-top: 8px;
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 8px 20px;
+            margin-top: 15px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .main-content {
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .search-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: #0d47a1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.15rem;
+            transition: all 0.3s;
+            min-width: 220px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2196f3;
+            box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.25);
+        }
+
+        button {
+            background: linear-gradient(90deg, #2196f3, #0d47a1);
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 10px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .result-section {
+            background: #e8f5e9;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #c8e6c9;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #c8e6c9;
+        }
+
+        .result-content {
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .account-display {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #1b5e20;
+            text-align: center;
+            padding: 25px 50px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+            border: 2px solid #4caf50;
+        }
+
+        .history-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: white;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            border-left: 4px solid #2196f3;
+        }
+
+        .history-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-vin {
+            font-weight: 600;
+            color: #0d47a1;
+            min-width: 85px;
+        }
+
+        .history-account {
+            font-weight: 700;
+            color: #1b5e20;
+            min-width: 110px;
+            text-align: center;
+        }
+
+        .history-time {
+            color: #757575;
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .empty-state {
+            color: #757575;
+            text-align: center;
+            padding: 25px;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            padding: 18px 30px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: linear-gradient(90deg, #d32f2f, #b71c1c);
+        }
+
+        .notification.success {
+            background: linear-gradient(90deg, #388e3c, #1b5e20);
+        }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+
+        .counter {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            width: 100%;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                margin: 20px auto;
+                max-width: 95%;
+            }
+
+            header {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 25px;
+            }
+
+            .account-display {
+                font-size: 2rem;
+                padding: 20px;
+            }
+
+            .history-item {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .history-time {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .stats {
+                font-size: 0.9rem;
+                padding: 6px 15px;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+                gap: 25px;
+            }
+
+            .search-section,
+            .result-section,
+            .history-section {
+                padding: 20px;
+            }
+
+            .input-container {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .account-display {
+                font-size: 1.7rem;
+                padding: 15px;
+            }
+
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            #clear-history {
+                align-self: flex-end;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-top: auto;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .highlight {
+            color: #ffd54f;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-database"></i> 车架号账户查询系统</h1>
+            <div class="subtitle">输入车架号后6位数字，快速查询对应账户信息</div>
+            <div class="stats">数据库记录：<span class="highlight">420</span> 条车架号账户数据</div>
+        </header>
+
+        <div class="main-content">
+            <section class="search-section">
+                <div class="input-group">
+                    <label for="vin-input"><i class="fas fa-barcode"></i> 输入车架号后6位：</label>
+                    <div class="input-container">
+                        <input type="text" id="vin-input" placeholder="例如：002803" maxlength="6">
+                        <button id="search-btn">
+                            <i class="fas fa-search"></i> 查询账户
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="result-section">
+                <div class="result-header">
+                    <h2><i class="fas fa-user-circle"></i> 查询结果</h2>
+                </div>
+                <div class="result-content">
+                    <div class="account-display" id="result-display">
+                        <i class="fas fa-car"></i> 等待查询...
+                    </div>
+                </div>
+            </section>
+
+            <section class="history-section">
+                <div class="history-header">
+                    <h2><i class="fas fa-history"></i> 查询历史</h2>
+                    <button id="clear-history" style="padding: 12px 20px; font-size: 1rem;">
+                        <i class="fas fa-trash-alt"></i> 清除记录
+                    </button>
+                </div>
+                <div class="history-list" id="history-list">
+                    <div class="empty-state">暂无查询历史记录</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text"></span>
+        <div class="counter"></div>
+    </div>
+
+    <footer>
+        <p>车架号账户查询系统 &copy; 2023 | 数据版本: 420条记录 | 安全可靠，快速查询</p>
+    </footer>
+
+    <script>
+        // 车架号与账户映射数据 (420条记录)
+        const vinMap = {
+            "002821": "常慧1",
+            "071711": "常慧1",
+            "072041": "常慧1",
+            "070821": "常慧1",
+            "072641": "常慧1",
+            "071405": "常慧1",
+            "070061": "常慧1",
+            "075581": "常慧1",
+            "074881": "常慧1",
+            "076681": "常慧1",
+            "078321": "常慧1",
+            "002781": "常慧1",
+            "072811": "常慧1",
+            "002601": "常慧1",
+            "002721": "常慧1",
+            "065551": "常慧1",
+            "066081": "常慧1",
+            "075661": "常慧1",
+            "074691": "常慧1",
+            "079611": "常慧1",
+            "083791": "常慧1",
+            "139761": "常慧1",
+            "147551": "常慧1",
+            "145901": "常慧1",
+            "117171": "常慧1",
+            "119861": "常慧1",
+            "120152": "常慧1",
+            "118882": "常慧1",
+            "119901": "常慧1",
+            "118382": "常慧1",
+            "117524": "常慧1",
+            "121432": "常慧1",
+            "120001": "常慧1",
+            "119592": "常慧1",
+            "187621": "常慧1",
+            "094081": "常慧1",
+            "187491": "常慧1",
+            "188371": "常慧1",
+            "123952": "常慧1",
+            "188361": "常慧1",
+            "159552": "常慧1",
+            "122632": "常慧1",
+            "118562": "常慧1",
+            "162132": "常慧1",
+            "149941": "常慧1",
+            "151451": "常慧1",
+            "151491": "常慧1",
+            "002841": "常慧1",
+            "071432": "常慧2",
+            "070032": "常慧2",
+            "071312": "常慧2",
+            "002772": "常慧2",
+            "002822": "常慧2",
+            "071302": "常慧2",
+            "071842": "常慧2",
+            "071732": "常慧2",
+            "071372": "常慧2",
+            "002842": "常慧2",
+            "002852": "常慧2",
+            "002782": "常慧2",
+            "078282": "常慧2",
+            "002752": "常慧2",
+            "002712": "常慧2",
+            "066732": "常慧2",
+            "066752": "常慧2",
+            "066832": "常慧2",
+            "091982": "常慧2",
+            "083232": "常慧2",
+            "083872": "常慧2",
+            "086222": "常慧2",
+            "087122": "常慧2",
+            "085672": "常慧2",
+            "147582": "常慧2",
+            "102592": "常慧2",
+            "094052": "常慧2",
+            "149992": "常慧2",
+            "152352": "常慧2",
+            "152762": "常慧2",
+            "002832": "常慧2",
+            "002803": "陈依妮1",
+            "070933": "陈依妮1",
+            "071753": "陈依妮1",
+            "002823": "陈依妮1",
+            "074433": "陈依妮1",
+            "069463": "陈依妮1",
+            "073893": "陈依妮1",
+            "073973": "陈依妮1",
+            "002853": "陈依妮1",
+            "070863": "陈依妮1",
+            "002793": "陈依妮1",
+            "072783": "陈依妮1",
+            "078943": "陈依妮1",
+            "002783": "陈依妮1",
+            "078713": "陈依妮1",
+            "002693": "陈依妮1",
+            "002633": "陈依妮1",
+            "002643": "陈依妮1",
+            "002703": "陈依妮1",
+            "066833": "陈依妮1",
+            "065133": "陈依妮1",
+            "066653": "陈依妮1",
+            "093453": "陈依妮1",
+            "079083": "陈依妮1",
+            "086213": "陈依妮1",
+            "087123": "陈依妮1",
+            "139423": "陈依妮2",
+            "146173": "陈依妮2",
+            "120113": "陈依妮2",
+            "188233": "陈依妮2",
+            "188893": "陈依妮2",
+            "188463": "陈依妮2",
+            "188523": "陈依妮2",
+            "122923": "陈依妮2",
+            "122263": "陈依妮2",
+            "187993": "陈依妮2",
+            "089003": "陈依妮2",
+            "088493": "陈依妮2",
+            "162183": "陈依妮2",
+            "131083": "陈依妮2",
+            "148873": "陈依妮2",
+            "128063": "陈依妮2",
+            "122363": "陈依妮2",
+            "094053": "陈依妮2",
+            "151463": "陈依妮2",
+            "150113": "陈依妮2",
+            "070934": "陈依妮3",
+            "069624": "陈依妮3",
+            "070004": "陈依妮3",
+            "070884": "陈依妮3",
+            "069454": "陈依妮3",
+            "066074": "陈依妮3",
+            "002824": "陈依妮3",
+            "002834": "陈依妮3",
+            "069464": "陈依妮3",
+            "071774": "陈依妮3",
+            "074504": "陈依妮3",
+            "071094": "陈依妮3",
+            "002844": "陈依妮3",
+            "002854": "陈依妮3",
+            "002784": "陈依妮3",
+            "072394": "陈依妮3",
+            "076374": "陈依妮3",
+            "078944": "陈依妮3",
+            "002704": "陈依妮3",
+            "002694": "陈依妮3",
+            "002644": "陈依妮3",
+            "002664": "陈依妮3",
+            "002714": "陈依妮3",
+            "002724": "陈依妮3",
+            "065114": "陈依妮3",
+            "074884": "陈依妮3",
+            "079084": "陈依妮3",
+            "084934": "陈依妮3",
+            "083134": "陈依妮3",
+            "083644": "陈依妮3",
+            "002805": "胡福松1",
+            "002815": "胡福松1",
+            "071495": "胡福松1",
+            "071415": "胡福松1",
+            "002825": "胡福松1",
+            "002845": "胡福松1",
+            "073885": "胡福松1",
+            "074415": "胡福松1",
+            "070005": "胡福松1",
+            "069235": "胡福松1",
+            "002855": "胡福松1",
+            "078425": "胡福松1",
+            "002795": "胡福松1",
+            "076195": "胡福松1",
+            "074895": "胡福松1",
+            "074395": "胡福松1",
+            "002725": "胡福松1",
+            "084955": "胡福松1",
+            "083715": "胡福松1",
+            "083095": "胡福松1",
+            "083765": "胡福松1",
+            "086025": "胡福松1",
+            "086005": "胡福松1",
+            "086045": "胡福松1",
+            "085935": "胡福松1",
+            "086035": "胡福松1",
+            "077725": "胡福松1",
+            "094165": "胡福松1",
+            "083635": "胡福松1",
+            "121405": "胡福松1",
+            "122735": "胡福松1",
+            "122655": "胡福松1",
+            "187395": "胡福松1",
+            "187425": "胡福松1",
+            "164035": "胡福松1",
+            "149235": "胡福松1",
+            "135145": "胡福松1",
+            "161885": "胡福松1",
+            "150205": "胡福松1",
+            "152485": "胡福松1",
+            "152635": "胡福松1",
+            "002857": "胡福松2",
+            "002837": "胡福松2",
+            "071307": "胡福松2",
+            "070867": "胡福松2",
+            "002807": "胡福松2",
+            "002827": "胡福松2",
+            "071327": "胡福松2",
+            "070827": "胡福松2",
+            "073947": "胡福松2",
+            "069997": "胡福松2",
+            "077357": "胡福松2",
+            "078257": "胡福松2",
+            "072917": "胡福松2",
+            "002797": "胡福松2",
+            "002787": "胡福松2",
+            "077337": "胡福松2",
+            "066737": "胡福松2",
+            "086217": "胡福松2",
+            "117417": "胡福松2",
+            "121417": "胡福松2",
+            "120087": "胡福松2",
+            "127037": "胡福松2",
+            "188877": "胡福松2",
+            "188967": "胡福松2",
+            "095107": "胡福松2",
+            "122037": "胡福松2",
+            "122207": "胡福松2",
+            "177477": "胡福松2",
+            "187377": "胡福松2",
+            "122317": "胡福松2",
+            "192017": "胡福松2",
+            "148637": "胡福松2",
+            "151457": "胡福松2",
+            "072028": "胡福松3",
+            "069618": "胡福松3",
+            "069998": "胡福松3",
+            "071498": "胡福松3",
+            "002858": "胡福松3",
+            "002818": "胡福松3",
+            "073988": "胡福松3",
+            "002828": "胡福松3",
+            "002848": "胡福松3",
+            "070018": "胡福松3",
+            "002778": "胡福松3",
+            "074438": "胡福松3",
+            "073968": "胡福松3",
+            "002798": "胡福松3",
+            "002718": "胡福松3",
+            "002648": "胡福松3",
+            "002678": "胡福松3",
+            "065118": "胡福松3",
+            "079088": "胡福松3",
+            "078458": "胡福松3",
+            "083248": "胡福松3",
+            "146368": "胡福松3",
+            "067148": "胡福松3",
+            "118978": "胡福松3",
+            "117418": "胡福松3",
+            "120768": "胡福松3",
+            "121188": "胡福松3",
+            "117718": "胡福松3",
+            "188368": "胡福松3",
+            "188708": "胡福松3",
+            "122528": "胡福松3",
+            "095058": "胡福松3",
+            "105588": "胡福松3",
+            "128268": "胡福松3",
+            "187448": "胡福松3",
+            "139758": "胡福松3",
+            "139928": "胡福松3",
+            "067138": "胡福松3",
+            "140858": "胡福松3",
+            "156278": "胡福松3",
+            "086134": "夏玉琴1",
+            "086144": "夏玉琴1",
+            "086034": "夏玉琴1",
+            "086004": "夏玉琴1",
+            "069444": "夏玉琴1",
+            "116864": "夏玉琴1",
+            "121514": "夏玉琴1",
+            "119524": "夏玉琴1",
+            "118454": "夏玉琴1",
+            "118494": "夏玉琴1",
+            "120934": "夏玉琴1",
+            "121614": "夏玉琴1",
+            "188524": "夏玉琴1",
+            "188534": "夏玉琴1",
+            "128114": "夏玉琴1",
+            "120404": "夏玉琴1",
+            "086064": "夏玉琴1",
+            "131644": "夏玉琴1",
+            "163324": "夏玉琴1",
+            "152584": "夏玉琴1",
+            "152394": "夏玉琴1",
+            "002810": "夏玉琴",
+            "071420": "夏玉琴",
+            "070060": "夏玉琴",
+            "072110": "夏玉琴",
+            "002840": "夏玉琴",
+            "074420": "夏玉琴",
+            "074380": "夏玉琴",
+            "074870": "夏玉琴",
+            "002830": "夏玉琴",
+            "078640": "夏玉琴",
+            "072360": "夏玉琴",
+            "074400": "夏玉琴",
+            "002780": "夏玉琴",
+            "074300": "夏玉琴",
+            "073930": "夏玉琴",
+            "002800": "夏玉琴",
+            "075800": "夏玉琴",
+            "002690": "夏玉琴",
+            "002710": "夏玉琴",
+            "002700": "夏玉琴",
+            "002630": "夏玉琴",
+            "002640": "夏玉琴",
+            "065120": "夏玉琴",
+            "083140": "夏玉琴",
+            "083100": "夏玉琴",
+            "083110": "夏玉琴",
+            "083690": "夏玉琴",
+            "086150": "夏玉琴",
+            "086010": "夏玉琴",
+            "086040": "夏玉琴",
+            "089080": "夏玉琴",
+            "091480": "夏玉琴",
+            "121600": "夏玉琴",
+            "118990": "夏玉琴",
+            "119160": "夏玉琴",
+            "117480": "夏玉琴",
+            "122010": "夏玉琴",
+            "119580": "夏玉琴",
+            "119650": "夏玉琴",
+            "118510": "夏玉琴",
+            "187640": "夏玉琴",
+            "095080": "夏玉琴",
+            "122020": "夏玉琴",
+            "146590": "夏玉琴",
+            "156790": "夏玉琴",
+            "105590": "夏玉琴",
+            "151480": "夏玉琴",
+            "071386": "杨光1",
+            "072386": "杨光1",
+            "002816": "杨光1",
+            "002836": "杨光1",
+            "071746": "杨光1",
+            "070666": "杨光1",
+            "074706": "杨光1",
+            "072366": "杨光1",
+            "072376": "杨光1",
+            "072846": "杨光1",
+            "002786": "杨光1",
+            "072406": "杨光1",
+            "078276": "杨光1",
+            "002706": "杨光1",
+            "002636": "杨光1",
+            "067196": "杨光1",
+            "066736": "杨光1",
+            "074946": "杨光1",
+            "090166": "杨光1",
+            "078226": "杨光1",
+            "147676": "杨光1",
+            "148126": "杨光1",
+            "121126": "杨光1",
+            "119186": "杨光1",
+            "188156": "杨光1",
+            "189006": "杨光1",
+            "188056": "杨光1",
+            "188966": "杨光1",
+            "123576": "杨光1",
+            "074686": "杨光1",
+            "136326": "杨光1",
+            "156936": "杨光1",
+            "094066": "杨光1",
+            "152366": "杨光1",
+            "086069": "杨光2",
+            "083639": "杨光2",
+            "085999": "杨光2",
+            "139509": "杨光2",
+            "147519": "杨光2",
+            "146409": "杨光2",
+            "146569": "杨光2",
+            "146309": "杨光2",
+            "146279": "杨光2",
+            "117599": "杨光2",
+            "119579": "杨光2",
+            "119649": "杨光2",
+            "188359": "杨光2",
+            "123009": "杨光2",
+            "188969": "杨光2",
+            "135619": "杨光2",
+            "132879": "杨光2",
+            "163349": "杨光2",
+            "120089": "杨光2",
+            "095059": "杨光2",
+            "150009": "杨光2",
+            "152209": "杨光2",
+            "152219": "杨光2",
+            "151449": "杨光2",
+            "002849": "杨光3",
+            "070039": "杨光3",
+            "070809": "杨光3",
+            "071379": "杨光3",
+            "071739": "杨光3",
+            "071059": "杨光3",
+            "073889": "杨光3",
+            "071469": "杨光3",
+            "069459": "杨光3",
+            "073959": "杨光3",
+            "075529": "杨光3",
+            "002829": "杨光3",
+            "002779": "杨光3",
+            "072839": "杨光3",
+            "002799": "杨光3",
+            "002709": "杨光3",
+            "002699": "杨光3",
+            "066379": "杨光3",
+            "067149": "杨光3",
+            "076809": "杨光3",
+            "090199": "杨光3",
+            "078339": "杨光3",
+            "079079": "杨光3",
+            "084289": "杨光3",
+            "084169": "杨光3"
+        };
+
+        // DOM元素
+        const vinInput = document.getElementById('vin-input');
+        const searchBtn = document.getElementById('search-btn');
+        const resultDisplay = document.getElementById('result-display');
+        const historyList = document.getElementById('history-list');
+        const clearHistoryBtn = document.getElementById('clear-history');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+
+        // 历史记录数组
+        let searchHistory = JSON.parse(localStorage.getItem('vinSearchHistory')) || [];
+
+        // 初始化
+        renderHistory();
+        console.log(`数据库已加载，共 ${Object.keys(vinMap).length} 条记录`);
+
+        // 查询按钮事件
+        searchBtn.addEventListener('click', searchAccount);
+
+        // 按Enter键查询
+        vinInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                searchAccount();
+            }
+        });
+
+        // 清除历史记录
+        clearHistoryBtn.addEventListener('click', () => {
+            searchHistory = [];
+            localStorage.setItem('vinSearchHistory', JSON.stringify(searchHistory));
+            renderHistory();
+            showNotification('历史记录已清除', 'success');
+        });
+
+        // 查询账户函数
+        function searchAccount() {
+            const vin = vinInput.value.trim();
+
+            // 验证输入
+            if (!vin) {
+                showNotification('请输入车架号后6位', 'error');
+                resultDisplay.innerHTML = '<i class="fas fa-exclamation-circle"></i> 请输入车架号';
+                resultDisplay.style.color = '#d32f2f';
+                return;
+            }
+
+            if (!/^\d{6}$/.test(vin)) {
+                showNotification('车架号必须是6位数字', 'error');
+                resultDisplay.innerHTML = '<i class="fas fa-times-circle"></i> 输入格式不正确';
+                resultDisplay.style.color = '#d32f2f';
+                return;
+            }
+
+            // 查询账户
+            const account = vinMap[vin];
+
+            if (account) {
+                resultDisplay.textContent = account;
+                resultDisplay.style.color = '#1b5e20';
+
+                // 添加到历史记录
+                addToHistory(vin, account);
+                showNotification('查询成功！找到对应账户', 'success');
+            } else {
+                resultDisplay.innerHTML = '<i class="fas fa-question-circle"></i> 未找到匹配账户';
+                resultDisplay.style.color = '#d32f2f';
+                showNotification('未找到匹配的账户信息', 'error');
+            }
+
+            // 清空输入框
+            vinInput.value = '';
+        }
+
+        // 添加到历史记录
+        function addToHistory(vin, account) {
+            // 移除重复记录
+            searchHistory = searchHistory.filter(item => item.vin !== vin);
+
+            // 添加到历史记录顶部
+            searchHistory.unshift({
+                vin,
+                account,
+                timestamp: new Date().toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                })
+            });
+
+            // 限制历史记录数量
+            if (searchHistory.length > 15) {
+                searchHistory.pop();
+            }
+
+            // 保存到本地存储
+            localStorage.setItem('vinSearchHistory', JSON.stringify(searchHistory));
+
+            // 更新UI
+            renderHistory();
+        }
+
+        // 渲染历史记录
+        function renderHistory() {
+            if (searchHistory.length === 0) {
+                historyList.innerHTML = '<div class="empty-state">暂无查询历史记录</div>';
+                return;
+            }
+
+            historyList.innerHTML = '';
+
+            searchHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-vin">${item.vin}</div>
+                    <div class="history-account">${item.account}</div>
+                    <div class="history-time">${item.timestamp}</div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // 显示通知
+        function showNotification(message, type) {
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            // 重置计数器动画
+            const counter = notification.querySelector('.counter');
+            counter.style.width = '100%';
+            counter.style.transition = 'none';
+            counter.offsetHeight; // 触发重绘
+            counter.style.transition = 'width 3s linear';
+            counter.style.width = '0';
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
